@@ -1,0 +1,97 @@
+/* Generated from replica/design/tokens.json by tools/gen-tokens.py. Do not edit by hand. */
+
+:root {
+  --color-bg: #FFFFFF;
+  --color-surface: #F4F5F7;
+  --color-border: #E1E4E8;
+  --color-border-input: #7F8791;
+  --color-text: #14171A;
+  --color-text-muted: #5B6470;
+  --color-accent: #3B5BDB;
+  --color-on-accent: #FFFFFF;
+  --color-danger: #C62828;
+  --color-on-danger: #FFFFFF;
+  --color-success: #1B7F3B;
+  --color-warning: #8A5A00;
+  --color-mask: #FF2D55;
+  --color-scrim: rgb(0 0 0 / 0.5);
+  --color-mask-edge: #FFFFFF;
+  --color-cursor-ring: #FFFFFF;
+  --color-cursor-edge: #000000;
+  --color-checker: rgb(136 136 136 / 0.27);
+  --fs-display: 2.5rem;
+  --lh-display: 3rem;
+  --fw-display: 700;
+  --fs-title: 1.75rem;
+  --lh-title: 2.25rem;
+  --fw-title: 600;
+  --fs-heading: 1.25rem;
+  --lh-heading: 1.75rem;
+  --fw-heading: 600;
+  --fs-body: 1rem;
+  --lh-body: 1.5rem;
+  --fw-body: 400;
+  --fs-body-sm: 0.875rem;
+  --lh-body-sm: 1.25rem;
+  --fw-body-sm: 400;
+  --fs-label: 0.875rem;
+  --lh-label: 1.25rem;
+  --fw-label: 500;
+  --fs-caption: 0.75rem;
+  --lh-caption: 1rem;
+  --fw-caption: 400;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 999px;
+  --elev-e1: 0 0.5px 1px rgb(0 0 0 / 0.25);
+  --elev-e2: 0 1.5px 3px rgb(0 0 0 / 0.25);
+  --elev-e3: 0 4px 8px rgb(0 0 0 / 0.25);
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --screen-margin: 1rem;
+  --max-content: 640px;
+  --touch: 48px;
+  --topbar-h: 56px;
+  --tile-h: 112px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0F1114;
+    --color-surface: #1A1D21;
+    --color-border: #2A2F36;
+    --color-border-input: #7A828C;
+    --color-text: #F2F4F7;
+    --color-text-muted: #A3ABB6;
+    --color-accent: #8EA2FF;
+    --color-on-accent: #0B1030;
+    --color-danger: #FF8A80;
+    --color-on-danger: #2B0A08;
+    --color-success: #6FD28F;
+    --color-warning: #F2B84B;
+  }
+}
+
+[data-theme="dark"] {
+  --color-bg: #0F1114;
+  --color-surface: #1A1D21;
+  --color-border: #2A2F36;
+  --color-border-input: #7A828C;
+  --color-text: #F2F4F7;
+  --color-text-muted: #A3ABB6;
+  --color-accent: #8EA2FF;
+  --color-on-accent: #0B1030;
+  --color-danger: #FF8A80;
+  --color-on-danger: #2B0A08;
+  --color-success: #6FD28F;
+  --color-warning: #F2B84B;
+}
