@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#3B5BDB">
+  <title>Tidy Photo</title>
+  <meta name="description" content="Brush over what you don't want and it disappears. Free, private, works offline.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="src/tokens.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16v4M17 18h4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v7h14v-7"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M4 17l5-5 4 4 3-3 4 4"/></symbol>
+  </svg>
+
+  <div id="live" class="sr-only" role="status" aria-live="polite"></div>
+
+  <main>
+    <!-- S01 home. S02 (picking a photo) is the system file picker, opened from here. -->
+    <section id="view-home" class="view" aria-labelledby="home-title">
+      <header class="topbar"><h1 id="home-title" class="topbar-title" tabindex="-1">Tidy Photo</h1></header>
+      <div class="home-body">
+        <p class="lede">Brush over what you don't want. It's gone in seconds.</p>
+        <button id="pick" class="tile" type="button">
+          <svg class="icon big" aria-hidden="true"><use href="#i-photo"/></svg>
+          <span class="tile-text">
+            <span class="tile-title">Remove object</span>
+            <span class="tile-sub">Choose a photo from this device</span>
+          </span>
+        </button>
+        <input id="file" type="file" accept="image/*" hidden>
+        <p id="home-error" class="error" role="alert" hidden></p>
+        <p class="note">Free, with no sign-up and no ads. Photos are processed on this device and are never uploaded.</p>
+        <p class="note muted">On a computer you can also drop a photo here or paste one.</p>
+        <button id="install" class="btn ghost" type="button" hidden>Install the app</button>
+      </div>
+    </section>
+
+    <!-- S03 editor, S04 working (overlay) -->
+    <section id="view-editor" class="view" data-theme="dark" aria-labelledby="ed-title" hidden>
+      <div id="ed-body" class="view-body">
+        <header class="topbar">
+          <button id="ed-back" class="icon-btn" type="button" aria-label="Back to start"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+          <h2 id="ed-title" class="topbar-title" tabindex="-1">Remove object</h2>
+          <button id="ed-undo" class="icon-btn" type="button" aria-label="Undo last stroke" disabled><svg class="icon" aria-hidden="true"><use href="#i-undo"/></svg></button>
+          <button id="ed-redo" class="icon-btn" type="button" aria-label="Redo stroke" disabled><svg class="icon" aria-hidden="true"><use href="#i-redo"/></svg></button>
+          <button id="ed-fit" class="icon-btn" type="button" aria-label="Fit photo to screen"><svg class="icon" aria-hidden="true"><use href="#i-fit"/></svg></button>
+        </header>
+        <p id="ed-hint" class="hint">Paint over what you want gone. Pinch or scroll to zoom, two fingers to move around.</p>
+        <div id="ed-viewport" class="viewport draw" role="img" aria-label="Your photo. Painting needs a touch screen, pen or mouse.">
+          <div id="ed-stage" class="stage"><canvas id="ed-image"></canvas><canvas id="ed-mask" class="mask-layer"></canvas></div>
+          <div id="ed-cursor" class="brush-cursor" hidden></div>
+        </div>
+        <footer class="toolbar">
+          <label class="slider" for="ed-brush"><span>Brush size</span><input id="ed-brush" type="range" min="12" max="160" step="2" value="48"><output id="ed-brush-out" for="ed-brush">48</output></label>
+          <div class="toolbar-actions">
+            <button id="ed-clear" class="btn secondary" type="button" disabled>Clear</button>
+            <button id="ed-erase" class="btn primary lg" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>Erase</button>
+          </div>
+        </footer>
+      </div>
+
+      <div id="processing" class="overlay" role="dialog" aria-modal="true" aria-labelledby="proc-title" hidden>
+        <div class="card">
+          <div id="proc-working">
+            <div class="spinner" aria-hidden="true"></div>
+            <h3 id="proc-title">Removing it…</h3>
+            <p>This can take a few seconds on a large photo. Nothing leaves your device.</p>
+            <button id="proc-cancel" class="btn secondary" type="button">Cancel</button>
+          </div>
+          <div id="proc-failed" hidden>
+            <h3>That didn't work</h3>
+            <p id="proc-error-text"></p>
+            <div class="stack">
+              <button id="proc-retry" class="btn primary" type="button">Try again</button>
+              <button id="proc-back" class="btn secondary" type="button">Back to the photo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S05 result -->
+    <section id="view-result" class="view" data-theme="dark" aria-labelledby="rs-title" hidden>
+      <header class="topbar">
+        <button id="rs-back" class="icon-btn" type="button" aria-label="Back to the brush marks"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+        <h2 id="rs-title" class="topbar-title" tabindex="-1">Done</h2>
+        <button id="rs-compare" class="btn ghost compare" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Show original</button>
+      </header>
+      <div id="rs-viewport" class="viewport view-only" role="img" aria-label="Your photo after removal. Hold the Show original button to compare.">
+        <div id="rs-stage" class="stage"><canvas id="rs-image"></canvas></div>
+      </div>
+      <footer class="toolbar">
+        <div class="toolbar-actions wide">
+          <button id="rs-save" class="btn primary lg" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Save</button>
+          <button id="rs-share" class="btn secondary" type="button" hidden><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
+          <button id="rs-continue" class="btn secondary" type="button">Keep editing</button>
+          <button id="rs-new" class="btn ghost" type="button">New photo</button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <noscript><p class="note">Tidy Photo needs JavaScript to run.</p></noscript>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
