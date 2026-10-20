@@ -1,0 +1,9 @@
+{
+  "name": "tidy-photo",
+  "private": true,
+  "type": "module",
+  "description": "Free in-browser object remover (working name). No dependencies, no build step.",
+  "scripts": {
+    "test": "node --test tests/core.test.mjs"
+  }
+}
